@@ -616,3 +616,46 @@ end
 
 
 If issues persist, contact your Banxa Account Manager.
+# Rate Limits
+
+> For the complete documentation index, see [llms.txt](https://docs.banxa.com/llms.txt). Append `.md` to any page URL for its markdown version.
+
+
+Banxa applies API rate limits to ensure platform stability and fairness across all clients. Requests are continuously monitored, and excessive traffic will be throttled.
+
+- **Production limit**: 500 requests per minute per IP address (applies across all endpoints).
+- **Sandbox limit**: 120 requests per minute per merchant account (applies across all endpoints). Sandbox is a shared testing environment; the lower limit keeps it responsive for all merchants.
+- **Error code**: If limits are exceeded, the API returns an HTTP `429 Too Many Requests` response.
+
+
+If you consistently encounter rate limiting under normal test or production usage, contact your Customer Success Manager or Banxa Support.
+
+## Best Practices
+
+**Monitor for 429 errors**
+
+- Occasional 429s are expected.
+- If you see them repeatedly, review your architecture and API usage.
+
+
+**Retry responsibly**
+
+- Avoid blind retries.
+- Use exponential backoff when retries are required.
+- For periodic checks, let the next scheduled call handle it instead of retrying.
+
+
+**Use webhooks wherever possible**
+
+- Webhooks push updates to your system.
+- This avoids unnecessary polling and reduces load on both Banxa and your infrastructure.
+
+
+**Call endpoints only when needed**
+
+- Example: Call `GET /price` only when a user is actively viewing a quote, rather than polling continuously.
+
+
+**Batch operations**
+
+- For reconciliation or reporting, use batch processes instead of sending many parallel calls.
